@@ -35,7 +35,7 @@ if [ -n "$1" -a -n "$2" ]; then
 else
 	echo "Stats for $(date -u -d $(date +${DEFAULT_STATS_START}) +%Y-%m-%d) through NOW"
 fi
-echo
+echo =======================================
 echo "Total Distance: ${TOTAL_DISTANCE_KM} km"
 echo "Fastest 1k:     ${FASTEST_1K} per km"
 echo "Fastest 5k:     ${FASTEST_5K} per km"
