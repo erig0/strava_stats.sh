@@ -23,12 +23,12 @@ fi
 JQ_PACE_EXPR="try (min_by(.moving_time / (.distance / 1000)) | .moving_time / (.distance / 1000) | floor + 1) catch 0"
 
 TOTAL_DISTANCE_KM=$(printf "%.2f" $(jq 'map(.distance) | add / 1000' "$TEMP_FILE"))
-FASTEST_1K=$(units -t $(jq   "map(select(.type == \"Run\" and .distance >=  1000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
-FASTEST_5K=$(units -t $(jq   "map(select(.type == \"Run\" and .distance >=  5000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
-FASTEST_10K=$(units -t $(jq  "map(select(.type == \"Run\" and .distance >= 10000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
-FASTEST_HALF=$(units -t $(jq "map(select(.type == \"Run\" and .distance >= 21097)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
-FASTEST_25K=$(units -t $(jq  "map(select(.type == \"Run\" and .distance >= 25000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
-FASTEST_FULL=$(units -t $(jq "map(select(.type == \"Run\" and .distance >= 42195)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_1K=$(units -o "%02g" -t $(jq   "map(select(.type == \"Run\" and .distance >=  1000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_5K=$(units -o "%02g" -t $(jq   "map(select(.type == \"Run\" and .distance >=  5000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_10K=$(units -o "%02g" -t $(jq  "map(select(.type == \"Run\" and .distance >= 10000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_HALF=$(units -o "%02g" -t $(jq "map(select(.type == \"Run\" and .distance >= 21097)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_25K=$(units -o "%02g" -t $(jq  "map(select(.type == \"Run\" and .distance >= 25000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
+FASTEST_FULL=$(units -o "%02g" -t $(jq "map(select(.type == \"Run\" and .distance >= 42195)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
 
 if [ -n "$1" -a -n "$2" ]; then
 	echo "Stats for $(date -u -d ${1} +%Y-%m-%d) through $(date -u -d ${2} +%Y-%m-%d)"
