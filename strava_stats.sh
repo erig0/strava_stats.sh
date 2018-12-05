@@ -10,7 +10,15 @@ fi
 . "$CONFIG_FILE"
 
 TEMP_FILE=$(mktemp)
-curl -s -X GET "https://www.strava.com/api/v3/athlete/activities?access_token=${ACCESS_TOKEN}&after=$(date -d $(date +%Y-%m-01T00:00:00Z) +%s)" -H "accept: application/json" > "$TEMP_FILE"
+
+DEFAULT_STATS_START="%Y-%m-01T00:00:00Z"
+
+if [ -n "$1" -a -n "$2" ]; then
+	curl -s -X GET "https://www.strava.com/api/v3/athlete/activities?access_token=${ACCESS_TOKEN}&after=$(date -u -d $1 +%s)&before=$(date -u -d $2 +%s)" -H "accept: application/json" > "$TEMP_FILE"
+else
+	# default to getting stats since first of month
+	curl -s -X GET "https://www.strava.com/api/v3/athlete/activities?access_token=${ACCESS_TOKEN}&after=$(date -u -d $(date +${DEFAULT_STATS_START}) +%s)" -H "accept: application/json" > "$TEMP_FILE"
+fi
 
 JQ_PACE_EXPR="try (min_by(.moving_time / (.distance / 1000)) | .moving_time / (.distance / 1000) | floor + 1) catch 0"
 
@@ -22,6 +30,12 @@ FASTEST_HALF=$(units -t $(jq "map(select(.type == \"Run\" and .distance >= 21097
 FASTEST_25K=$(units -t $(jq  "map(select(.type == \"Run\" and .distance >= 25000)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
 FASTEST_FULL=$(units -t $(jq "map(select(.type == \"Run\" and .distance >= 42195)) | ${JQ_PACE_EXPR}" ${TEMP_FILE})" seconds" "min;sec")
 
+if [ -n "$1" -a -n "$2" ]; then
+	echo "Stats for $(date -u -d ${1} +%Y-%m-%d) through $(date -u -d ${2} +%Y-%m-%d)"
+else
+	echo "Stats for $(date -u -d $(date +${DEFAULT_STATS_START}) +%Y-%m-%d) through NOW"
+fi
+echo
 echo "Total Distance: ${TOTAL_DISTANCE_KM} km"
 echo "Fastest 1k: ${FASTEST_1K} per km"
 echo "Fastest 5k: ${FASTEST_5K} per km"
