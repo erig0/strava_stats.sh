@@ -37,11 +37,11 @@ else
 fi
 echo
 echo "Total Distance: ${TOTAL_DISTANCE_KM} km"
-echo "Fastest 1k: ${FASTEST_1K} per km"
-echo "Fastest 5k: ${FASTEST_5K} per km"
-echo "Fastest 10k: ${FASTEST_10K} per km"
-echo "Fastest half: ${FASTEST_HALF} per km"
-echo "Fastest 25k: ${FASTEST_25K} per km"
-echo "Fastest full: ${FASTEST_FULL} per km"
+echo "Fastest 1k:     ${FASTEST_1K} per km"
+echo "Fastest 5k:     ${FASTEST_5K} per km"
+echo "Fastest 10k:    ${FASTEST_10K} per km"
+echo "Fastest half:   ${FASTEST_HALF} per km"
+echo "Fastest 25k:    ${FASTEST_25K} per km"
+echo "Fastest full:   ${FASTEST_FULL} per km"
 
 rm "$TEMP_FILE"
